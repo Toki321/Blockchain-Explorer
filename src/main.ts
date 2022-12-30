@@ -1,19 +1,37 @@
-const { ethers, utils } = require('ethers');
+import { determineAction } from './determineActionOnTxData';
+
+import { ethers } from 'ethers';
 require('dotenv').config({ path: '../.env' });
 
-const provider = new ethers.providers.EtherscanProvider(
+const etherscanProvider = new ethers.providers.EtherscanProvider(
   'goerli',
   process.env.ETHERSCAN_API_KEY
 );
 
-async function getHistoryForAddress() {
-  const txHistory = await provider.getHistory(
-    '0x7d15661b775db93c6f914214a521AC9032C63764',
-    8140810,
-    8211345
-  );
+const walletAddresss = '0xE9Fad814dfCa0b7B3C0a8049C42FD92daff80713';
 
-  console.log(txHistory);
+async function getTxsForAddress(walletAddresss: string) {
+  const txHistory = await etherscanProvider.getHistory(walletAddresss);
+
+  return txHistory;
 }
 
-getHistoryForAddress();
+async function checkEachTx() {
+  const txs = await getTxsForAddress(walletAddresss);
+
+  let i = 0;
+
+  txs.forEach((txObject) => {
+    console.log(i);
+
+    determineAction(txObject);
+
+    console.log(txObject);
+
+    i++;
+  });
+}
+
+checkEachTx();
+
+export {};

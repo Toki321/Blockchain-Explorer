@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@types/node": "^18.11.18",
+    "axios": "^1.2.1",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2"
   }
