@@ -12,7 +12,7 @@ const provider = new ethers.providers.InfuraProvider(
 
 export async function decodeTxData(tx) {
   const txHash =
-    '0xc2e8b909b6e2b6ca2aac2b520a81cdec59aef78102eeff39434ad2915059f99e';
+    '0xe2633d6a87ce3833c99b569727420efe3b2f8747d007f5012e563e6042a233ca';
 
   tx = await provider.getTransaction(txHash);
 
@@ -32,15 +32,28 @@ export async function decodeTxData(tx) {
     return;
   }
 
-  let decodedData = iface.parseTransaction({ data: tx.data, value: tx.value });
+  // let decodedData = iface.parseTransaction({ data: tx.data, value: tx.value });
 
-  console.log('decoded data:', decodedData.args.data);
+  // console.log('decoded data:', decodedData.args.data);
 
-  const newDecodedData = iface.parseTransaction({
-    data: decodedData.args.data[2],
+  // const newDecodedData = iface.decodefu({
+  //   data: decodedData.args.data[2],
+  // });
+
+  // console.log(newDecodedData);
+
+  const calldataArray = iface.decodeFunctionData(tx.data.slice(0, 10), tx.data);
+  console.log(calldataArray);
+
+  // for (const calldata of calldataArray) {
+  //   // decoding each log. if you don't have the function in the uniswapInterface, this would throw
+  //   console.log(iface.decodeFunctionData(calldata.slice(0, 10), calldata));
+  // }
+
+  calldataArray[1].forEach((element) => {
+    console.log(iface.decodeFunctionData(element.slice(0, 10), element));
+    // console.log(element);
   });
-
-  console.log(newDecodedData);
 }
 
 decodeTxData(' ');
